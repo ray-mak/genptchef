@@ -21,6 +21,40 @@
   margin: 0;
 }
 
+.green-bar {
+  position: absolute;
+  height: 6px;
+  width: 80%;
+  background-color: rgb(23, 165, 23);
+  left: 10%;
+  top: 14%;
+  z-index: -1;
+}
+
+.slider-input {
+  display: none;
+}
+
+.slider-label > div {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 7px solid rgb(214, 214, 214);
+  background-color: white;
+}
+
+.slider-input:checked + div {
+  border: 7px solid rgb(31, 158, 6);
+}
+
+.slider-label:hover div {
+  border: 7px solid rgb(41, 196, 11);
+}
+
+textarea {
+  resize: none;
+}
+
 @media (max-width: 768px) {
   .navbar {
     position: fixed;

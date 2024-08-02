@@ -4,10 +4,17 @@ import React, { useState } from "react"
 import ingredientsList from "../../../public/ingredients.json"
 import IngredientInput from "./_components/IngredientInput"
 import IngredientsList from "./_components/IngredientsList"
+import RecipeStyle from "./_components/RecipeStyle"
 
 export default function MyIngredientsPage() {
+  const [recipeStyle, setRecipeStyle] = useState<string>("5")
   const [ingredients, setIngredients] = useState<string[]>(ingredientsList)
   const [inputValue, setInputValue] = useState<string>("")
+  const [specialInstructions, setSpecialInstructions] = useState<string>("")
+
+  function recipeStyleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setRecipeStyle(e.target.value)
+  }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value)
@@ -43,8 +50,17 @@ export default function MyIngredientsPage() {
     setIngredients(ingredients.filter((_, i) => i !== index))
   }
 
+  function updateInstructions(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setSpecialInstructions(e.target.value)
+  }
+
+  console.log(recipeStyle)
   return (
-    <div className="flex flex-col gap-y-4 text-sm">
+    <div className="flex flex-col gap-y-6 text-sm">
+      <RecipeStyle
+        recipeStyle={recipeStyle}
+        recipeStyleChange={recipeStyleChange}
+      />
       <label htmlFor="addIngredient" className="w-full">
         <p>Add Ingredients</p>
         <IngredientInput
@@ -63,6 +79,17 @@ export default function MyIngredientsPage() {
           onRemove={removeIngredient}
         />
       </div>
+      <label htmlFor="specialInstructions" className="flex flex-col">
+        Special Instructions
+        <textarea
+          id="specialInstructions"
+          name="specialInstructions"
+          value={specialInstructions}
+          onChange={updateInstructions}
+          rows={5}
+          className="border-2 rounded-lg shadow-lg mt-1 p-2"
+        />
+      </label>
     </div>
   )
 }

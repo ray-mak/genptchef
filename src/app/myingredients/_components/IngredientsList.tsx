@@ -13,7 +13,7 @@ export default function IngredientsList({
   onRemove,
 }: IngredientsListProps) {
   return (
-    <div className="p-4 flex flex-wrap gap-x-6 gap-y-4 max-h-40 overflow-auto">
+    <div className="p-4 flex flex-wrap gap-x-6 gap-y-4 max-h-60 overflow-auto">
       {ingredients.map((item, index) => {
         return (
           <div key={item} className="flex">
