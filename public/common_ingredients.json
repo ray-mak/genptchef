@@ -1,0 +1,43 @@
+{
+  "seasonings": [
+    "salt",
+    "black pepper",
+    "garlic powder",
+    "onion powder",
+    "paprika",
+    "cumin",
+    "chili powder",
+    "soy sauce",
+    "olive oil",
+    "vinegar",
+    "butter",
+    "honey",
+    "mustard"
+  ],
+  "vegetables": [
+    "onion",
+    "garlic",
+    "carrot",
+    "potato",
+    "tomato",
+    "bell pepper",
+    "broccoli",
+    "spinach",
+    "lettuce",
+    "green beans",
+    "corn",
+    "peas"
+  ],
+  "meats": [
+    "chicken breast",
+    "ground beef",
+    "pork chops",
+    "salmon",
+    "shrimp",
+    "eggs",
+    "milk",
+    "cheddar cheese",
+    "greek yogurt",
+    "butter"
+  ]
+}

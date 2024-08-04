@@ -55,6 +55,10 @@ textarea {
   resize: none;
 }
 
+.ingredient-panel {
+  max-height: calc(100vh - 4rem);
+}
+
 @media (max-width: 768px) {
   .navbar {
     position: fixed;
@@ -125,5 +129,38 @@ textarea {
 
   .dimmer.opened {
     opacity: 0.5;
+  }
+
+  .main-container {
+    position: relative;
+  }
+
+  .ingredient-panel.view-list {
+    width: 100%;
+    position: absolute;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .ingredient-panel.close-list {
+    width: 0;
+    padding: 0;
+    overflow: hidden;
+    left: -100%;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .button-container {
+    width: 100%;
+  }
+
+  .recipe-panel.close-list {
+    width: 0;
+    position: absolute;
+    right: -100%;
+    overflow: hidden;
+  }
+
+  .recipe-panel.view-list {
+    width: 100%;
   }
 }

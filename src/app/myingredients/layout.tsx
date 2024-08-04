@@ -13,9 +13,7 @@ export default function MainLayout({
         <NavLink href="/profile">Profile</NavLink>
       </PublicNavbar>
       <div className="flex">
-        <div className="w-full p-4 md:w-2/3 mx-auto my-20 md:my-6">
-          {children}
-        </div>
+        <div className="w-full mt-16 md:mt-0">{children}</div>
       </div>
     </>
   )
