@@ -3,18 +3,24 @@
 export default function ButtonContainer({
   viewList,
   toggleViewList,
+  getRecipes,
+  loading,
 }: {
   viewList: boolean
   toggleViewList: () => void
+  getRecipes: () => void
+  loading: boolean
 }) {
   return (
     <div className="button-container flex gap-4 fixed md:w-2/5 xl:w-1/4 bottom-0 p-4 bg-neutral-100 border-2">
       <button
-        className={`w-full bg-lime-600 text-white p-4 rounded-lg hover:opacity-80 ${
-          viewList ? "block" : "hidden"
-        }`}
+        onClick={getRecipes}
+        className={`w-full text-white bg-lime-600 p-4 rounded-lg hover:opacity-80 ${
+          loading ? "opacity-80" : "opacity-100"
+        } ${viewList ? "block" : "hidden"}`}
+        disabled={loading}
       >
-        Generate Recipe
+        {loading ? "Generating Recipes..." : "Generate Recipe"}
       </button>
       <button
         type="button"

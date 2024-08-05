@@ -8,13 +8,27 @@ import RecipeStyle from "./_components/RecipeStyle"
 import QuickIngredients from "./_components/QuickIngredients"
 import commonIngredients from "../../../public/common_ingredients.json"
 import ButtonContainer from "./_components/ButtonContainer"
+import OpenAI from "openai"
+
+type Recipe = {
+  title: string
+  ingredients: string[]
+  instructions: string[]
+  cookTime: string
+}
+
+type RecipeResponse = {
+  recipes: Recipe[]
+}
 
 export default function MyIngredientsPage() {
   const [recipeStyle, setRecipeStyle] = useState<string>("5")
   const [ingredients, setIngredients] = useState<string[]>(ingredientsList)
   const [inputValue, setInputValue] = useState<string>("")
   const [specialInstructions, setSpecialInstructions] = useState<string>("")
-  const [viewList, setViewList] = useState<boolean>(false)
+  const [viewList, setViewList] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [recipes, setRecipes] = useState<Recipe[]>()
 
   function recipeStyleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setRecipeStyle(e.target.value)
@@ -74,6 +88,55 @@ export default function MyIngredientsPage() {
     ),
   }
 
+  const openai = new OpenAI({
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true,
+  })
+
+  async function getRecipes() {
+    setLoading(true)
+    try {
+      const completion = await openai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a culinary expert with a talent for creating innovative and unique recipes. You will be given a number between 1 and 5 for creativity (creativityScale) when creating recipes. 1 represents clasic recipes using traditional ingredients like chicken curry with jasmine rice or beef stew. 5 represents the most innovative recipe ideas like mashed rice cakes with curry gravy and chicken, or a curry burger with tortillas. You do not have to use all the ingredients provided. Special requests may be included regarding the recipe, which will override these instructions if there are contradictions. Please provide 5 recipes that include the following details: title, ingredients, instructions, and cookTime. Please return the recipe in json format.",
+          },
+          {
+            role: "user",
+            content: `{
+            creativityScale : ${recipeStyle},
+            ingredients: ${ingredients},
+            specialRequests: ${specialInstructions}
+          }`,
+          },
+        ],
+        model: "gpt-4o-mini",
+      })
+      console.log(completion)
+      // console.log(completion.choices[0].message.content)
+
+      const jsonString =
+        completion.choices[0].message.content
+          ?.replace(/^```json\s*/, "")
+          .replace(/```$/, "") || "{}"
+      const jsonData = JSON.parse(jsonString)
+      // const parsedData = JSON.parse(jsonData)
+      setRecipes(jsonData.recipes)
+    } catch (error) {
+      console.error("Error fetching recipe:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  console.log(recipes)
+
+  function getLog() {
+    console.log(recipes)
+  }
+
   return (
     <div className="main-container flex">
       <div
@@ -119,9 +182,25 @@ export default function MyIngredientsPage() {
           addIngredient={addIngredient}
         />
       </div>
-      <ButtonContainer viewList={viewList} toggleViewList={toggleViewList} />
+      <ButtonContainer
+        viewList={viewList}
+        toggleViewList={toggleViewList}
+        getRecipes={getRecipes}
+        loading={loading}
+      />
       <div className={`recipe-panel  ${viewList ? "close-list" : "view-list"}`}>
-        <h1>This is for the recipe</h1>
+        <h1>This is for the recipes</h1>
+        <button className="p-4 bg-green-400 text-white" onClick={getLog}>
+          Log
+        </button>
+        {recipes &&
+          recipes.map((item: Recipe) => {
+            return (
+              <p>
+                {item.title} {item.cookTime}
+              </p>
+            )
+          })}
       </div>
     </div>
   )
