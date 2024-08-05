@@ -55,8 +55,23 @@ textarea {
   resize: none;
 }
 
-.ingredient-panel {
+.ingredient-panel,
+.recipe-panel {
   max-height: calc(100vh - 4rem);
+}
+
+.recipe-card {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s;
+}
+
+.recipe-card > div {
+  overflow: hidden;
+}
+
+.recipe-card.expanded {
+  grid-template-rows: 1fr;
 }
 
 @media (max-width: 768px) {
@@ -158,6 +173,7 @@ textarea {
     position: absolute;
     right: -100%;
     overflow: hidden;
+    padding: 0;
   }
 
   .recipe-panel.view-list {

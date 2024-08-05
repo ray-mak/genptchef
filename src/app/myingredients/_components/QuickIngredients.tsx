@@ -29,11 +29,13 @@ export default function QuickIngredients({
                   <p className="bg-lime-600 opacity-80 rounded-l-lg p-1 px-2 text-white">
                     {item}
                   </p>
-                  <div className="p-1 px-2 bg-lime-600 rounded-r-lg hover:cursor-pointer">
+                  <div
+                    className="p-1 px-2 bg-lime-600 rounded-r-lg hover:cursor-pointer"
+                    onClick={() => addIngredient(item)}
+                  >
                     <FontAwesomeIcon
                       icon={faPlus}
                       style={{ color: "#ffffff" }}
-                      onClick={() => addIngredient(item)}
                     />
                   </div>
                 </div>

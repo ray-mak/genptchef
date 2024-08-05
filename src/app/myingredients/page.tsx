@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import ingredientsList from "../../../public/ingredients.json"
 import IngredientInput from "./_components/IngredientInput"
 import IngredientsList from "./_components/IngredientsList"
@@ -9,16 +9,14 @@ import QuickIngredients from "./_components/QuickIngredients"
 import commonIngredients from "../../../public/common_ingredients.json"
 import ButtonContainer from "./_components/ButtonContainer"
 import OpenAI from "openai"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown"
 
 type Recipe = {
   title: string
   ingredients: string[]
   instructions: string[]
   cookTime: string
-}
-
-type RecipeResponse = {
-  recipes: Recipe[]
 }
 
 export default function MyIngredientsPage() {
@@ -29,6 +27,9 @@ export default function MyIngredientsPage() {
   const [viewList, setViewList] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)
   const [recipes, setRecipes] = useState<Recipe[]>()
+  const [expandedCards, setExpandedCards] = useState(
+    (recipes || []).map(() => ({ open: false }))
+  )
 
   function recipeStyleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setRecipeStyle(e.target.value)
@@ -101,7 +102,7 @@ export default function MyIngredientsPage() {
           {
             role: "system",
             content:
-              "You are a culinary expert with a talent for creating innovative and unique recipes. You will be given a number between 1 and 5 for creativity (creativityScale) when creating recipes. 1 represents clasic recipes using traditional ingredients like chicken curry with jasmine rice or beef stew. 5 represents the most innovative recipe ideas like mashed rice cakes with curry gravy and chicken, or a curry burger with tortillas. You do not have to use all the ingredients provided. Special requests may be included regarding the recipe, which will override these instructions if there are contradictions. Please provide 5 recipes that include the following details: title, ingredients, instructions, and cookTime. Please return the recipe in json format.",
+              "You are a culinary expert with a talent for creating innovative and unique recipes. You will be given a number between 1 and 5 for creativity (creativityScale) when creating recipes. 1 represents clasic recipes using traditional ingredients like chicken curry with jasmine rice or beef stew. 5 represents the most innovative recipe ideas like mashed rice cakes with curry gravy and chicken, or a curry burger with tortillas. You do not have to use all the ingredients provided. Special requests may be included regarding the recipe, which will override these instructions if there are contradictions. Please provide 5 recipes that include the following details: title, ingredients, instructions, and cookTime. Please return the recipe in json format: {recipes: [{title: string, ingredients: string[], instructions: string[], cookTime: string}]}",
           },
           {
             role: "user",
@@ -122,7 +123,7 @@ export default function MyIngredientsPage() {
           ?.replace(/^```json\s*/, "")
           .replace(/```$/, "") || "{}"
       const jsonData = JSON.parse(jsonString)
-      // const parsedData = JSON.parse(jsonData)
+
       setRecipes(jsonData.recipes)
     } catch (error) {
       console.error("Error fetching recipe:", error)
@@ -131,12 +132,19 @@ export default function MyIngredientsPage() {
     }
   }
 
-  console.log(recipes)
-
-  function getLog() {
-    console.log(recipes)
+  function toggleExpanded(index: number) {
+    setExpandedCards((prevState) =>
+      prevState.map((card, i) =>
+        i === index ? { ...card, open: !card.open } : card
+      )
+    )
   }
 
+  useEffect(() => {
+    setExpandedCards((recipes || []).map(() => ({ open: false })))
+  }, [recipes])
+
+  console.log(recipes)
   return (
     <div className="main-container flex">
       <div
@@ -188,17 +196,61 @@ export default function MyIngredientsPage() {
         getRecipes={getRecipes}
         loading={loading}
       />
-      <div className={`recipe-panel  ${viewList ? "close-list" : "view-list"}`}>
+      <div
+        className={`recipe-panel flex flex-col gap-y-4 p-6 pb-32 md:pb-6 md:w-3/5 xl:w-3/4 overflow-y-scroll ${
+          viewList ? "close-list" : "view-list"
+        }`}
+      >
         <h1>This is for the recipes</h1>
-        <button className="p-4 bg-green-400 text-white" onClick={getLog}>
-          Log
-        </button>
         {recipes &&
-          recipes.map((item: Recipe) => {
+          recipes.map((item: Recipe, index) => {
             return (
-              <p>
-                {item.title} {item.cookTime}
-              </p>
+              <div
+                key={index}
+                className="flex flex-col border-2 border-amber-600 rounded-lg p-6 shadow-lg"
+              >
+                <div
+                  className="flex items-center cursor-pointer"
+                  onClick={() => toggleExpanded(index)}
+                >
+                  <div>
+                    <p className="text-xl font-semibold">{item.title}</p>
+                    <p className="text-neutral-600">
+                      Cook time: {item.cookTime}
+                    </p>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={faChevronDown}
+                    className={`ml-auto transition-transform ${
+                      expandedCards[index]?.open ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+                <div
+                  className={`recipe-card ${
+                    expandedCards[index]?.open ? "expanded" : ""
+                  }`}
+                >
+                  <div>
+                    <div className="my-2">
+                      <p className="text-lg font-semibold">Ingredients:</p>
+                      {item.ingredients.map((ingredient) => {
+                        return <p key={ingredient}>- {ingredient}</p>
+                      })}
+                    </div>
+                    <div className="flex flex-col gap-y-2">
+                      <p className="text-lg font-semibold">Instructions: </p>
+                      {item.instructions.map((instruction, index) => {
+                        return (
+                          <p key={index}>
+                            {index + 1}. {instruction}
+                          </p>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
             )
           })}
       </div>
