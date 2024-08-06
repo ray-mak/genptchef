@@ -10,6 +10,7 @@ import {
   UserButton,
   SignUpButton,
 } from "@clerk/nextjs"
+import { checkUser } from "@/lib/checkUser"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const user = checkUser()
   return (
     <ClerkProvider>
       <html lang="en">
