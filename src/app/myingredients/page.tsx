@@ -11,12 +11,17 @@ import ButtonContainer from "./_components/ButtonContainer"
 import OpenAI from "openai"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown"
+import RecipesPanel from "./_components/RecipesPanel"
 
-type Recipe = {
+export type Recipe = {
   title: string
   ingredients: string[]
   instructions: string[]
   cookTime: string
+}
+
+export type CardState = {
+  open: boolean
 }
 
 export default function MyIngredientsPage() {
@@ -27,7 +32,7 @@ export default function MyIngredientsPage() {
   const [viewList, setViewList] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)
   const [recipes, setRecipes] = useState<Recipe[]>()
-  const [expandedCards, setExpandedCards] = useState(
+  const [expandedCards, setExpandedCards] = useState<CardState[]>(
     (recipes || []).map(() => ({ open: false }))
   )
 
@@ -196,64 +201,12 @@ export default function MyIngredientsPage() {
         getRecipes={getRecipes}
         loading={loading}
       />
-      <div
-        className={`recipe-panel flex flex-col gap-y-4 p-6 pb-32 md:pb-6 md:w-3/5 xl:w-3/4 overflow-y-scroll ${
-          viewList ? "close-list" : "view-list"
-        }`}
-      >
-        <h1>This is for the recipes</h1>
-        {recipes &&
-          recipes.map((item: Recipe, index) => {
-            return (
-              <div
-                key={index}
-                className="flex flex-col border-2 border-amber-600 rounded-lg p-6 shadow-lg"
-              >
-                <div
-                  className="flex items-center cursor-pointer"
-                  onClick={() => toggleExpanded(index)}
-                >
-                  <div>
-                    <p className="text-xl font-semibold">{item.title}</p>
-                    <p className="text-neutral-600">
-                      Cook time: {item.cookTime}
-                    </p>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faChevronDown}
-                    className={`ml-auto transition-transform ${
-                      expandedCards[index]?.open ? "rotate-180" : ""
-                    }`}
-                  />
-                </div>
-                <div
-                  className={`recipe-card ${
-                    expandedCards[index]?.open ? "expanded" : ""
-                  }`}
-                >
-                  <div>
-                    <div className="my-2">
-                      <p className="text-lg font-semibold">Ingredients:</p>
-                      {item.ingredients.map((ingredient) => {
-                        return <p key={ingredient}>- {ingredient}</p>
-                      })}
-                    </div>
-                    <div className="flex flex-col gap-y-2">
-                      <p className="text-lg font-semibold">Instructions: </p>
-                      {item.instructions.map((instruction, index) => {
-                        return (
-                          <p key={index}>
-                            {index + 1}. {instruction}
-                          </p>
-                        )
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-      </div>
+      <RecipesPanel
+        viewList={viewList}
+        recipes={recipes}
+        expandedCards={expandedCards}
+        toggleExpanded={toggleExpanded}
+      />
     </div>
   )
 }

@@ -20,7 +20,7 @@ export default function ButtonContainer({
         } ${viewList ? "block" : "hidden"}`}
         disabled={loading}
       >
-        {loading ? "Generating Recipes..." : "Generate Recipe"}
+        {loading ? "Generating Recipes..." : "Generate Recipes"}
       </button>
       <button
         type="button"
