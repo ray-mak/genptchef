@@ -11,7 +11,7 @@ export function PublicNavbar({ children }: { children: ReactNode }) {
     setHamburgerMenu((prevState) => !prevState)
   }
   return (
-    <nav className="navbar w-full bg-neutral-100 text-neutral-800 flex justify-center items-center p-4 md:p-0">
+    <nav className="navbar w-full h-20 bg-neutral-100 text-neutral-800 flex justify-center items-center p-4 md:p-0">
       <div className="w-full md:w-2/3 flex">
         <div className="flex">
           <img src="/logo.svg" alt="Logo" className="w-40" />
@@ -40,9 +40,8 @@ export function NavLink(props: Omit<ComponentProps<typeof Link>, "className">) {
   return (
     <Link
       {...props}
-      className={`p-2 md:p-4 md:hover:bg-green-400 md:hover:text-white md:focus-visible:bg-green-400 md:focus-visible:text-white ${
-        pathName === props.href &&
-        "underline md:no-underline md:bg-green-500 md:text-white"
+      className={`p-2 md:p-4 hover:opacity-80 ${
+        pathName === props.href && "underline"
       }`}
     />
   )
