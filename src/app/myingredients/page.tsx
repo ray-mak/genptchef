@@ -9,9 +9,9 @@ import QuickIngredients from "./_components/QuickIngredients"
 import commonIngredients from "../../../public/common_ingredients.json"
 import ButtonContainer from "./_components/ButtonContainer"
 import OpenAI from "openai"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown"
 import RecipesPanel from "./_components/RecipesPanel"
+import addIngredientDB from "../actions/addIngredientDB"
+import { useAuth } from "@clerk/nextjs"
 
 export type Recipe = {
   title: string
@@ -36,6 +36,13 @@ export default function MyIngredientsPage() {
     (recipes || []).map(() => ({ open: false }))
   )
 
+  const { isSignedIn } = useAuth()
+
+  async function addIngredientToDB(ingredient: string) {
+    const result = await addIngredientDB(ingredient)
+    console.log(result)
+  }
+
   function recipeStyleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setRecipeStyle(e.target.value)
   }
@@ -45,8 +52,12 @@ export default function MyIngredientsPage() {
   }
 
   function handleAddIngredientClick() {
-    if (inputValue.trim()) {
-      addIngredient(inputValue.trim().toLocaleLowerCase())
+    const inputIngredient = inputValue.trim().toLowerCase()
+    if (inputIngredient) {
+      if (isSignedIn) {
+        addIngredientToDB(inputIngredient)
+      }
+      addIngredient(inputIngredient)
       setInputValue("")
     }
   }
@@ -54,8 +65,12 @@ export default function MyIngredientsPage() {
   function handleKeydown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault()
-      if (inputValue.trim()) {
-        addIngredient(inputValue.trim().toLocaleLowerCase())
+      const inputIngredient = inputValue.trim().toLowerCase()
+      if (inputIngredient) {
+        if (isSignedIn) {
+          addIngredientToDB(inputIngredient)
+        }
+        addIngredient(inputIngredient)
         setInputValue("")
       }
     }
