@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import ingredientsList from "../../../public/ingredients.json"
 import IngredientInput from "./_components/IngredientInput"
 import IngredientsList from "./_components/IngredientsList"
 import RecipeStyle from "./_components/RecipeStyle"
@@ -10,7 +9,11 @@ import commonIngredients from "../../../public/common_ingredients.json"
 import ButtonContainer from "./_components/ButtonContainer"
 import OpenAI from "openai"
 import RecipesPanel from "./_components/RecipesPanel"
-import addIngredientDB from "../actions/addIngredientDB"
+import {
+  addIngredientDB,
+  deleteIngredient,
+  getIngredients,
+} from "../actions/ingredientActions"
 import { useAuth } from "@clerk/nextjs"
 
 export type Recipe = {
@@ -25,8 +28,10 @@ export type CardState = {
 }
 
 export default function MyIngredientsPage() {
+  const { isSignedIn } = useAuth()
+
   const [recipeStyle, setRecipeStyle] = useState<string>("5")
-  const [ingredients, setIngredients] = useState<string[]>(ingredientsList)
+  const [ingredients, setIngredients] = useState<string[]>([])
   const [inputValue, setInputValue] = useState<string>("")
   const [specialInstructions, setSpecialInstructions] = useState<string>("")
   const [viewList, setViewList] = useState<boolean>(true)
@@ -36,11 +41,32 @@ export default function MyIngredientsPage() {
     (recipes || []).map(() => ({ open: false }))
   )
 
-  const { isSignedIn } = useAuth()
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      if (isSignedIn) {
+        try {
+          const result = await getIngredients()
+          if (result.error) {
+            console.log(result.error)
+          } else if (result.ingredientText) {
+            setIngredients(result.ingredientText)
+          }
+        } catch (error) {
+          console.error("Error fetching ingredients: ", error)
+        }
+      }
+    }
+
+    fetchIngredients()
+  }, [isSignedIn])
 
   async function addIngredientToDB(ingredient: string) {
-    const result = await addIngredientDB(ingredient)
-    console.log(result)
+    try {
+      const result = await addIngredientDB(ingredient)
+      console.log(result)
+    } catch (error) {
+      console.error("Error adding ingredients: ", error)
+    }
   }
 
   function recipeStyleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -85,8 +111,24 @@ export default function MyIngredientsPage() {
     }
   }
 
-  function removeIngredient(index: number) {
-    setIngredients(ingredients.filter((_, i) => i !== index))
+  function removeIngredient(ingredient: string) {
+    const deleteIngredientFromDB = async () => {
+      setIngredients(ingredients.filter((item) => item !== ingredient))
+      if (isSignedIn) {
+        try {
+          const result = await deleteIngredient(ingredient)
+          if (result.error) {
+            console.log(result.error)
+          } else {
+            setIngredients(ingredients.filter((item) => item !== ingredient))
+            console.log(result.message)
+          }
+        } catch (error) {
+          console.error("Error deleting ingredient: ", error)
+        }
+      }
+    }
+    deleteIngredientFromDB()
   }
 
   function updateInstructions(e: React.ChangeEvent<HTMLTextAreaElement>) {

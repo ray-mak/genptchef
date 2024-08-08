@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 type IngredientsListProps = {
   ingredients: string[]
-  onRemove: (index: number) => void
+  onRemove: (ingredient: string) => void
 }
 
 export default function IngredientsList({
@@ -21,7 +21,7 @@ export default function IngredientsList({
               {item}
             </p>
             <div
-              onClick={() => onRemove(index)}
+              onClick={() => onRemove(item)}
               className="p-1 px-2 bg-lime-600 rounded-r-lg hover:cursor-pointer"
             >
               <FontAwesomeIcon icon={faXmark} style={{ color: "#ffffff" }} />
