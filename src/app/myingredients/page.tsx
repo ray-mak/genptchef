@@ -40,7 +40,7 @@ export default function MyIngredientsPage() {
   const [expandedCards, setExpandedCards] = useState<CardState[]>(
     (recipes || []).map(() => ({ open: false }))
   )
-
+  // Functions to handle ingredient input/deletion for users vs guests.
   useEffect(() => {
     const fetchIngredients = async () => {
       if (isSignedIn) {
@@ -69,21 +69,13 @@ export default function MyIngredientsPage() {
     }
   }
 
-  function recipeStyleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setRecipeStyle(e.target.value)
-  }
-
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setInputValue(e.target.value)
-  }
-
   function handleAddIngredientClick() {
     const inputIngredient = inputValue.trim().toLowerCase()
     if (inputIngredient) {
       if (isSignedIn) {
         addIngredientToDB(inputIngredient)
       }
-      addIngredient(inputIngredient)
+      addIngredientClient(inputIngredient)
       setInputValue("")
     }
   }
@@ -96,13 +88,24 @@ export default function MyIngredientsPage() {
         if (isSignedIn) {
           addIngredientToDB(inputIngredient)
         }
-        addIngredient(inputIngredient)
+        addIngredientClient(inputIngredient)
         setInputValue("")
       }
     }
   }
 
-  function addIngredient(ingredient: string) {
+  function quickAddIngredient(ingredient: string) {
+    const inputIngredient = ingredient.trim().toLowerCase()
+    if (inputIngredient) {
+      if (isSignedIn) {
+        addIngredientToDB(inputIngredient)
+      }
+      addIngredientClient(inputIngredient)
+      setInputValue("")
+    }
+  }
+
+  function addIngredientClient(ingredient: string) {
     if (ingredients.includes(ingredient)) {
       setInputValue("")
       return
@@ -131,6 +134,16 @@ export default function MyIngredientsPage() {
     deleteIngredientFromDB()
   }
 
+  //Handle input logic
+
+  function recipeStyleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setRecipeStyle(e.target.value)
+  }
+
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInputValue(e.target.value)
+  }
+
   function updateInstructions(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setSpecialInstructions(e.target.value)
   }
@@ -150,6 +163,8 @@ export default function MyIngredientsPage() {
       (item) => !ingredients.includes(item)
     ),
   }
+
+  //openAI logic
 
   const openai = new OpenAI({
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
@@ -249,7 +264,7 @@ export default function MyIngredientsPage() {
         </label>
         <QuickIngredients
           ingredients={filteredIngredients}
-          addIngredient={addIngredient}
+          addIngredient={quickAddIngredient}
         />
       </div>
       <ButtonContainer
