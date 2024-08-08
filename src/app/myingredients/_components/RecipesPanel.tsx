@@ -2,7 +2,11 @@
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { CardState, Recipe } from "../page"
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
+import {
+  faArrowUpFromBracket,
+  faChevronDown,
+} from "@fortawesome/free-solid-svg-icons"
+import { faBookmark } from "@fortawesome/free-regular-svg-icons"
 
 type RecipesPanelProps = {
   viewList: boolean
@@ -44,21 +48,36 @@ export default function RecipesPanel({
               key={index}
               className="flex flex-col border-2 border-amber-600 rounded-lg p-6 shadow-lg"
             >
-              <div
-                className="flex items-center cursor-pointer"
+              <button
+                className="flex flex-col flex-col-reverse sm:flex-row items-center gap-4 cursor-pointer"
                 onClick={() => toggleExpanded(index)}
+                aria-label="Show/hide recipe"
               >
                 <div>
-                  <p className="text-xl font-semibold">{item.title}</p>
-                  <p className="text-neutral-600">Cook time: {item.cookTime}</p>
+                  <p className="text-xl font-semibold text-left">
+                    {item.title}
+                  </p>
+                  <p className="text-neutral-600 text-left">
+                    Cook time: {item.cookTime}
+                  </p>
                 </div>
-                <FontAwesomeIcon
-                  icon={faChevronDown}
-                  className={`ml-auto transition-transform ${
-                    expandedCards[index]?.open ? "rotate-180" : ""
-                  }`}
-                />
-              </div>
+                <div className="ml-auto flex items-center gap-2">
+                  <FontAwesomeIcon
+                    icon={faArrowUpFromBracket}
+                    className="border p-2 border-neutral-600 rounded-md"
+                  />
+                  <FontAwesomeIcon
+                    icon={faBookmark}
+                    className="border p-2 border-neutral-600 rounded-md mr-6"
+                  />
+                  <FontAwesomeIcon
+                    icon={faChevronDown}
+                    className={`transition-transform ${
+                      expandedCards[index]?.open ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+              </button>
               <div
                 className={`recipe-card ${
                   expandedCards[index]?.open ? "expanded" : ""

@@ -22,12 +22,25 @@ model User {
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt
   ingredients Ingredient[]
+  recipes Recipe[]
 }
 
 model Ingredient {
   id String @id @default(uuid())
   text String
   userId String
+  user User @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  @@index([userId])
+}
+
+model Recipe {
+  id String @id @default(uuid())
+  userId String
+  title String
+  ingredients String[]
+  instructions String[]
+  cookTime String
   user User @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
   createdAt DateTime @default(now())
   @@index([userId])

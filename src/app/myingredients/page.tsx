@@ -221,6 +221,8 @@ export default function MyIngredientsPage() {
     setExpandedCards((recipes || []).map(() => ({ open: false })))
   }, [recipes])
 
+  // saving and sharing recipes logic
+
   console.log(recipes)
   return (
     <div className="main-container flex">
