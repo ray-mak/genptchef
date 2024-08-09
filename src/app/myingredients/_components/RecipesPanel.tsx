@@ -13,6 +13,7 @@ type RecipesPanelProps = {
   recipes: Recipe[] | undefined
   expandedCards: CardState[]
   toggleExpanded: (index: number) => void
+  saveRecipe: (index: number) => void
 }
 
 export default function RecipesPanel({
@@ -20,6 +21,7 @@ export default function RecipesPanel({
   recipes,
   expandedCards,
   toggleExpanded,
+  saveRecipe,
 }: RecipesPanelProps) {
   return (
     <div
@@ -50,10 +52,9 @@ export default function RecipesPanel({
             >
               <button
                 className="flex flex-col flex-col-reverse sm:flex-row items-center gap-4 cursor-pointer"
-                onClick={() => toggleExpanded(index)}
                 aria-label="Show/hide recipe"
               >
-                <div>
+                <div onClick={() => toggleExpanded(index)}>
                   <p className="text-xl font-semibold text-left">
                     {item.title}
                   </p>
@@ -68,13 +69,15 @@ export default function RecipesPanel({
                   />
                   <FontAwesomeIcon
                     icon={faBookmark}
-                    className="border p-2 border-neutral-600 rounded-md mr-6"
+                    className="border p-2 border-neutral-600 rounded-md mr-6 z-10"
+                    onClick={() => saveRecipe(index)}
                   />
                   <FontAwesomeIcon
                     icon={faChevronDown}
                     className={`transition-transform ${
                       expandedCards[index]?.open ? "rotate-180" : ""
                     }`}
+                    onClick={() => toggleExpanded(index)}
                   />
                 </div>
               </button>

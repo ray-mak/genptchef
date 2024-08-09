@@ -15,8 +15,10 @@ import {
   getIngredients,
 } from "../actions/ingredientActions"
 import { useAuth } from "@clerk/nextjs"
+import { addRecipeDB } from "../actions/recipeActions"
 
 export type Recipe = {
+  id: string
   title: string
   ingredients: string[]
   instructions: string[]
@@ -222,6 +224,22 @@ export default function MyIngredientsPage() {
   }, [recipes])
 
   // saving and sharing recipes logic
+  async function saveRecipeToDB(index: number) {
+    if (recipes) {
+      const { title, ingredients, instructions, cookTime } = recipes[index]
+      if (isSignedIn) {
+        try {
+          const recipe = { title, ingredients, instructions, cookTime }
+          const result = await addRecipeDB(recipe)
+          console.log(result)
+        } catch (error) {
+          console.error("Error saving recipe:", error)
+        }
+      } else {
+        alert("You must be signed in to save a recipe!")
+      }
+    }
+  }
 
   console.log(recipes)
   return (
@@ -280,6 +298,7 @@ export default function MyIngredientsPage() {
         recipes={recipes}
         expandedCards={expandedCards}
         toggleExpanded={toggleExpanded}
+        saveRecipe={saveRecipeToDB}
       />
     </div>
   )

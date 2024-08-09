@@ -4,7 +4,14 @@ import { auth } from "@clerk/nextjs/server"
 import { revalidatePath } from "next/cache"
 
 type MyRecipeProps = {
-  id?: string
+  id: string
+  title: string
+  cookTime: string
+  ingredients: string[]
+  instructions: string[]
+}
+
+type AddRecipeProps = {
   title: string
   cookTime: string
   ingredients: string[]
@@ -41,7 +48,7 @@ export async function getSavedRecipes(): Promise<{
 }
 
 export async function addRecipeDB(
-  recipe: MyRecipeProps
+  recipe: AddRecipeProps
 ): Promise<{ message?: string; error?: string }> {
   const { userId } = auth()
   if (!userId) {
@@ -87,6 +94,7 @@ export async function deleteRecipeDB(
     } else {
       return { error: "Recipe for user not found" }
     }
+    revalidatePath("/")
     return { message: `${foundRecipe.title} deleted` }
   } catch (error) {
     return { error: "Recipe not deleted" }
