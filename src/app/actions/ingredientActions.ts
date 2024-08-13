@@ -3,8 +3,6 @@ import { db } from "@/lib/db"
 import { auth } from "@clerk/nextjs/server"
 import { revalidatePath } from "next/cache"
 
-//to do: fix addIngredient function on page
-
 export async function getIngredients(): Promise<{
   ingredientText?: string[]
   error?: string

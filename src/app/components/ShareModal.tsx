@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { CldUploadWidget } from "next-cloudinary"
 import { Recipe } from "../myingredients/page"
 import { useState } from "react"
+import { addPostDB } from "../actions/postActions"
 
 type ShareModalProps = {
   title: string
@@ -23,14 +24,13 @@ export default function ShareModal({
   hideModal,
 }: ShareModalProps) {
   const [recipeData, setRecipeData] = useState(recipe)
-  const [foodImage, setFoodImage] = useState<string | null>()
+  const [foodImage, setFoodImage] = useState<string>("")
   const [notes, setNotes] = useState<string>("")
-  const [imageData, setImageData] = useState<ImageData | null>()
 
   const handleUploadSuccess = (result: any) => {
-    const { public_id, secure_url } = result.info
-
+    const { secure_url } = result.info
     setFoodImage(secure_url)
+
     console.log(result)
   }
 
@@ -38,7 +38,25 @@ export default function ShareModal({
     setNotes(e.target.value)
   }
 
-  console.log(foodImage)
+  const shareRecipe = async () => {
+    const recipeData = {
+      title: recipe.title,
+      cookTime: recipe.cookTime,
+      instructions: recipe.instructions,
+      ingredients: recipe.ingredients,
+      imageUrl: foodImage,
+      notes,
+    }
+
+    try {
+      const result = await addPostDB(recipeData)
+      console.log(result)
+      hideModal()
+    } catch (error) {
+      console.error("Error saving post:", error)
+    }
+  }
+
   return (
     <div className="flex flex-col gap-4 border w-fit p-6 bg-white rounded-lg">
       <div className="flex gap-4 border-b items-center py-2">
@@ -54,7 +72,7 @@ export default function ShareModal({
       <div className="w-96 h-56 overflow-hidden rounded-lg">
         <img
           className="w-full h-full object-cover"
-          src={`${foodImage ? foodImage : "foodicon.png"}`}
+          src={`${foodImage === "" ? "foodicon.png" : foodImage}`}
         />
       </div>
       <CldUploadWidget
@@ -86,9 +104,10 @@ export default function ShareModal({
       </label>
       <button
         type="button"
+        onClick={shareRecipe}
         className="bg-lime-600 text-white p-2 rounded-lg hover:opacity-80"
       >
-        Submit Recipe
+        Share Recipe
       </button>
     </div>
   )

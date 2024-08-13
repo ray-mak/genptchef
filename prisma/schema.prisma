@@ -4,6 +4,9 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+//after updating schemas
+//npx prisma generate, npx prisma migrate dev, name(ex): user_post_create
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,6 +26,7 @@ model User {
   updateAt DateTime @updatedAt
   ingredients Ingredient[]
   recipes Recipe[]
+  posts Post[]
 }
 
 model Ingredient {
@@ -43,5 +47,21 @@ model Recipe {
   cookTime String
   user User @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
   createdAt DateTime @default(now())
+  @@index([userId])
+}
+
+model Post {
+  id String @id @default(uuid())
+  userId String
+  name String
+  imageUrl String
+  title String
+  ingredients String[]
+  instructions String[]
+  cookTime String
+  notes String
+  user User @relation(fields: [userId], references: [clerkUserId], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   @@index([userId])
 }
