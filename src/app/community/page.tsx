@@ -1,7 +1,6 @@
 "use client"
 
 import { CldUploadWidget } from "next-cloudinary"
-import ShareModal from "../components/ShareModal"
 
 export default function CommunityPage() {
   const handleUploadSuccess = (result: any) => {
@@ -10,7 +9,6 @@ export default function CommunityPage() {
 
   return (
     <div>
-      <ShareModal />
       <CldUploadWidget
         signatureEndpoint="/api/sign-image"
         onSuccess={handleUploadSuccess}

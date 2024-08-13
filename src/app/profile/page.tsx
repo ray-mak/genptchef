@@ -8,6 +8,7 @@ import {
   faArrowUpFromBracket,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons"
+import ShareModal from "../components/ShareModal"
 
 export default function ProfilePage() {
   const { isSignedIn } = useAuth()
@@ -15,6 +16,7 @@ export default function ProfilePage() {
   const [myRecipes, setMyRecipes] = useState<Recipe[]>([])
   const [recipe, setRecipe] = useState<Recipe | null>()
   const [recipeVisible, setRecipeVisible] = useState<boolean>(false)
+  const [modalVisible, setModalVisible] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -60,6 +62,14 @@ export default function ProfilePage() {
 
   function closeRecipe() {
     setRecipeVisible(false)
+  }
+
+  function viewModal() {
+    setModalVisible(true)
+  }
+
+  function hideModal() {
+    setModalVisible(false)
   }
 
   return (
@@ -109,6 +119,7 @@ export default function ProfilePage() {
               <button
                 className="px-2 py-1 rounded-md"
                 aria-label="Share recipe"
+                onClick={viewModal}
               >
                 <FontAwesomeIcon icon={faArrowUpFromBracket} />
               </button>
@@ -129,6 +140,18 @@ export default function ProfilePage() {
               })}
             </div>
           </div>
+          {modalVisible && (
+            <div className="absolute">
+              <div className="relative z-5">
+                <ShareModal
+                  title={recipe.title}
+                  hideModal={hideModal}
+                  recipe={recipe}
+                />
+              </div>
+              <div className="w-full h-full fixed top-0 left-0 opacity-70 bg-black z-4"></div>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -77,7 +77,7 @@ textarea {
 @media (max-width: 768px) {
   .navbar {
     position: fixed;
-    z-index: 10;
+    z-index: 3;
   }
 
   .navmenu {
