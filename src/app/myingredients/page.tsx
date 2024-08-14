@@ -42,6 +42,9 @@ export default function MyIngredientsPage() {
   const [expandedCards, setExpandedCards] = useState<CardState[]>(
     (recipes || []).map(() => ({ open: false }))
   )
+
+  const [modalVisible, setModalVisible] = useState<boolean>(false)
+
   // Functions to handle ingredient input/deletion for users vs guests.
   useEffect(() => {
     const fetchIngredients = async () => {
@@ -239,6 +242,14 @@ export default function MyIngredientsPage() {
         alert("You must be signed in to save a recipe!")
       }
     }
+  }
+
+  function viewModal() {
+    setModalVisible(true)
+  }
+
+  function hideModal() {
+    setModalVisible(false)
   }
 
   console.log(recipes)

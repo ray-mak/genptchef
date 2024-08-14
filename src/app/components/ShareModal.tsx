@@ -12,18 +12,11 @@ type ShareModalProps = {
   hideModal: () => void
 }
 
-type ImageData = {
-  publicId: string
-  thumbnail: string
-  url: string
-}
-
 export default function ShareModal({
   title,
   recipe,
   hideModal,
 }: ShareModalProps) {
-  const [recipeData, setRecipeData] = useState(recipe)
   const [foodImage, setFoodImage] = useState<string>("")
   const [notes, setNotes] = useState<string>("")
 
@@ -58,7 +51,7 @@ export default function ShareModal({
   }
 
   return (
-    <div className="flex flex-col gap-4 border w-fit p-6 bg-white rounded-lg">
+    <div className="w-full sm:w-auto flex flex-col gap-4 border w-fit p-6 bg-white rounded-lg">
       <div className="flex gap-4 border-b items-center py-2">
         <p>Share this recipe with the community!</p>
         <button
@@ -69,7 +62,7 @@ export default function ShareModal({
           <FontAwesomeIcon icon={faXmark} style={{ color: "#f74040" }} />
         </button>
       </div>
-      <div className="w-96 h-56 overflow-hidden rounded-lg">
+      <div className="w-full h-48 sm:w-96 sm:h-56 overflow-hidden rounded-lg">
         <img
           className="w-full h-full object-cover"
           src={`${foodImage === "" ? "foodicon.png" : foodImage}`}

@@ -6,8 +6,9 @@ export default function ProfileLayout({
   return (
     <>
       <div className="w-full flex justify-center">
-        {children}
-        <div className="max-w-7xl mt-16 md:mt-0"></div>
+        <div className="w-full flex justify-center mt-16 md:mt-0">
+          {children}
+        </div>
       </div>
     </>
   )

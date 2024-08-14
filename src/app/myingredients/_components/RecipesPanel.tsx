@@ -64,10 +64,6 @@ export default function RecipesPanel({
                 </div>
                 <div className="ml-auto flex items-center gap-2">
                   <FontAwesomeIcon
-                    icon={faArrowUpFromBracket}
-                    className="border p-2 border-neutral-600 rounded-md"
-                  />
-                  <FontAwesomeIcon
                     icon={faBookmark}
                     className="border p-2 border-neutral-600 rounded-md mr-6 z-10"
                     onClick={() => saveRecipe(index)}

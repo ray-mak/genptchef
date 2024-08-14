@@ -11,6 +11,7 @@ type PostProps = {
   imageUrl: string
   ingredients: string[]
   instructions: string[]
+  cookTime: string
 }
 
 type AddPostProps = {
@@ -37,6 +38,7 @@ export async function getPosts(): Promise<{
         imageUrl: post.imageUrl,
         ingredients: post.ingredients,
         instructions: post.instructions,
+        cookTime: post.cookTime,
       }
     })
     return { postsData }
