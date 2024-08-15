@@ -5,7 +5,7 @@ import Link from "next/link"
 
 export default function CommunityPage() {
   return (
-    <div className="md:w-2/3">
+    <div className="md:w-2/3 mb-20">
       <h1 className="text-center text-2xl font-semibold my-8">
         Community Recipes
       </h1>
@@ -18,7 +18,6 @@ export default function CommunityPage() {
 
 async function RecipeCard() {
   const posts = await getPosts()
-  console.log(posts)
   const postData = posts.postsData
   if (postData) {
     return postData.map((post) => (

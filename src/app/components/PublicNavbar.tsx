@@ -12,10 +12,10 @@ export function PublicNavbar({ children }: { children: ReactNode }) {
   }
   return (
     <nav className="navbar w-full h-20 bg-neutral-100 text-neutral-800 flex justify-center items-center p-4 md:p-0">
-      <div className="w-full md:w-2/3 flex">
-        <div className="flex">
+      <div className="w-full md:w-5/6 lg:w-2/3 flex">
+        <Link href="/" className="flex">
           <img src="/logo.svg" alt="Logo" className="w-40" />
-        </div>
+        </Link>
         <div
           onClick={toggleHamburger}
           className={`hamburger ${hamburgerMenu ? "opened" : ""}`}
