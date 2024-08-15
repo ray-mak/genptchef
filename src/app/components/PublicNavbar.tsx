@@ -40,7 +40,7 @@ export function NavLink(props: Omit<ComponentProps<typeof Link>, "className">) {
   return (
     <Link
       {...props}
-      className={`p-2 md:p-4 hover:opacity-80 ${
+      className={`text-sm lg:text-base p-2 md:p-4 hover:opacity-80 ${
         pathName === props.href && "underline"
       }`}
     />

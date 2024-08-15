@@ -43,8 +43,8 @@ export default function ShareModal({
 
     try {
       const result = await addPostDB(recipeData)
-      console.log(result)
       hideModal()
+      console.log(result)
     } catch (error) {
       console.error("Error saving post:", error)
     }
@@ -83,7 +83,7 @@ export default function ShareModal({
           )
         }}
       </CldUploadWidget>
-      <p className="text-xl font-semibold">{title}</p>
+      <p className="text-xl font-semibold max-w-96">{title}</p>
       <label htmlFor="notes">
         <p>Notes (optional):</p>
         <textarea
