@@ -20,8 +20,8 @@ async function RecipeCard() {
   const posts = await getPosts()
   const postData = posts.postsData
   if (postData) {
-    return postData.map((post) => (
-      <div className="h-auto shadow-2xl rounded-lg overflow-hidden">
+    return postData.map((post, index) => (
+      <div key={index} className="h-auto shadow-2xl rounded-lg overflow-hidden">
         <div className="w-full h-auto aspect-video overflow-hidden">
           <img
             src={post.imageUrl}

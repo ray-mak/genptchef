@@ -1,4 +1,5 @@
 import { db } from "@/lib/db"
+import Image from "next/image"
 import { notFound } from "next/navigation"
 
 export default async function RecipePage({
@@ -13,12 +14,8 @@ export default async function RecipePage({
 
   return (
     <div className="max-w-2xl border my-8">
-      <div className="w-full aspect-video">
-        <img
-          src={post.imageUrl}
-          alt={`Picture of ${post.title}`}
-          className="w-full h-full object-cover"
-        />
+      <div className="relative w-full h-auto aspect-video">
+        <Image src={post.imageUrl} alt={`Picture of ${post.title}`} fill />
       </div>
       <div className="flex flex-col gap-2 p-4">
         <h1 className="text-xl font-semibold">{post.title}</h1>
