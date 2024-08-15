@@ -23,7 +23,7 @@ export default async function RecipePage({
       <div className="flex flex-col gap-2 p-4">
         <h1 className="text-xl font-semibold">{post.title}</h1>
         <div className="flex">
-          <p>by {post.name}</p>
+          <p>by {post.name === null ? post.username : post.name}</p>
           <p className="ml-auto">
             {new Date(post.createdAt).toLocaleDateString("en-US", {
               year: "numeric",

@@ -2,11 +2,9 @@
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { CardState, Recipe } from "../page"
-import {
-  faArrowUpFromBracket,
-  faChevronDown,
-} from "@fortawesome/free-solid-svg-icons"
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
 import { faBookmark } from "@fortawesome/free-regular-svg-icons"
+import { useEffect, useState } from "react"
 
 type RecipesPanelProps = {
   viewList: boolean
@@ -16,6 +14,10 @@ type RecipesPanelProps = {
   saveRecipe: (index: number) => void
 }
 
+type RecipeSavedState = {
+  saved: boolean
+}
+
 export default function RecipesPanel({
   viewList,
   recipes,
@@ -23,6 +25,20 @@ export default function RecipesPanel({
   toggleExpanded,
   saveRecipe,
 }: RecipesPanelProps) {
+  const [recipeSaved, setRecipeSaved] = useState<RecipeSavedState[]>([])
+
+  useEffect(() => {
+    setRecipeSaved((recipes || []).map(() => ({ saved: false })))
+  }, [recipes])
+
+  function setSaveRecipe(index: number) {
+    setRecipeSaved((prevState) =>
+      prevState.map((recipe, i) =>
+        i === index ? { ...recipe, saved: true } : recipe
+      )
+    )
+  }
+  console.log(recipeSaved)
   return (
     <div
       className={`recipe-panel flex flex-col gap-y-4 p-6 pb-32 md:pb-6 md:w-3/5 xl:w-3/4 overflow-y-scroll ${
@@ -63,11 +79,22 @@ export default function RecipesPanel({
                   </p>
                 </div>
                 <div className="ml-auto flex items-center gap-2">
-                  <FontAwesomeIcon
-                    icon={faBookmark}
-                    className="border p-2 border-neutral-600 rounded-md mr-6 z-10"
-                    onClick={() => saveRecipe(index)}
-                  />
+                  {recipeSaved.length > 0 && recipeSaved[index].saved ? (
+                    <FontAwesomeIcon
+                      icon={faBookmark}
+                      className="border p-2 bg-lime-600 rounded-md mr-6 z-10"
+                      style={{ color: "#ffffff" }}
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faBookmark}
+                      className="border p-2 border-neutral-600 rounded-md mr-6 z-10"
+                      onClick={() => {
+                        saveRecipe(index)
+                        setSaveRecipe(index)
+                      }}
+                    />
+                  )}
                   <FontAwesomeIcon
                     icon={faChevronDown}
                     className={`transition-transform ${

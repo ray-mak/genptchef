@@ -56,8 +56,9 @@ textarea {
 }
 
 .ingredient-panel,
-.recipe-panel {
-  max-height: calc(100vh - 4rem);
+.recipe-panel,
+.loading-screen {
+  max-height: calc(100vh - 5rem);
 }
 
 .recipe-card {

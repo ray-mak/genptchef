@@ -9,6 +9,7 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons"
 import ShareModal from "../components/ShareModal"
+import Link from "next/link"
 
 export default function ProfilePage() {
   const { isSignedIn } = useAuth()
@@ -75,8 +76,10 @@ export default function ProfilePage() {
   return (
     <div className="w-full">
       <div className="flex justify-center">
-        <div className="border p-2 bg-lime-600 mt-12 rounded-md">
-          <p className="text-white font-medium text-lg p-2">Saved Recipes</p>
+        <div className="border p-2 bg-lime-600 mt-12 rounded-md md:min-w-96">
+          <p className="text-white font-medium text-lg p-2 text-center">
+            Saved Recipes
+          </p>
           <div className="bg-white rounded-md">
             {myRecipes.map((recipe, index) => {
               return (
@@ -105,6 +108,24 @@ export default function ProfilePage() {
                 </div>
               )
             })}
+            {myRecipes.length < 1 && (
+              <div className="p-6 m-auto max-w-lg">
+                <img
+                  src="/recipeicon.png"
+                  alt="recipe icon"
+                  width={100}
+                  className="m-auto"
+                />
+                <p className="mt-6 text-center">
+                  You do not have any saved recipes. Generate some recipes in
+                  the{" "}
+                  <Link href="/myingredients" className="underline">
+                    My Ingredients
+                  </Link>{" "}
+                  page and save them first!
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

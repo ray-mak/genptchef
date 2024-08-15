@@ -16,6 +16,7 @@ import {
 } from "../actions/ingredientActions"
 import { useAuth } from "@clerk/nextjs"
 import { addRecipeDB } from "../actions/recipeActions"
+import ClipLoader from "react-spinners/ClipLoader"
 
 export type Recipe = {
   id: string
@@ -42,8 +43,6 @@ export default function MyIngredientsPage() {
   const [expandedCards, setExpandedCards] = useState<CardState[]>(
     (recipes || []).map(() => ({ open: false }))
   )
-
-  const [modalVisible, setModalVisible] = useState<boolean>(false)
 
   // Functions to handle ingredient input/deletion for users vs guests.
   useEffect(() => {
@@ -244,17 +243,19 @@ export default function MyIngredientsPage() {
     }
   }
 
-  function viewModal() {
-    setModalVisible(true)
-  }
-
-  function hideModal() {
-    setModalVisible(false)
-  }
-
-  console.log(recipes)
   return (
     <div className="main-container flex">
+      {loading && (
+        <div>
+          <div className="loading-screen absolute w-full bg-white h-full z-10 opacity-80"></div>
+          <div className="loading-screen absolute w-full h-full  flex items-center justify-center">
+            <div className="p-12 bg-white flex flex-col gap-8 items-center justify-center bg-white z-20 border-2 border-lime-600 rounded-lg shadow-xl">
+              <ClipLoader size={100} color={"rgb(101 163 13)"} />
+              <p className="italic text-neutral-600">Generating recipes...</p>
+            </div>
+          </div>
+        </div>
+      )}
       <div
         className={`ingredient-panel md:w-2/5 xl:w-1/4 p-6 pb-32 flex flex-col gap-y-6 text-sm overflow-y-scroll ${
           viewList ? "view-list" : "close-list"

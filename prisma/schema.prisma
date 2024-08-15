@@ -20,7 +20,8 @@ model User {
   id String @id @default(uuid())
   clerkUserId String @unique
   email String @unique
-  name String 
+  name String
+  username String? 
   imageUrl String
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt
@@ -54,6 +55,7 @@ model Post {
   id String @id @default(uuid())
   userId String
   name String
+  username String?
   imageUrl String
   title String
   ingredients String[]

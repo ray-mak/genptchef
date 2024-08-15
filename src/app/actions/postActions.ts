@@ -12,6 +12,7 @@ type PostProps = {
   ingredients: string[]
   instructions: string[]
   cookTime: string
+  username: string
 }
 
 type AddPostProps = {
@@ -21,6 +22,7 @@ type AddPostProps = {
   instructions: string[]
   imageUrl: string
   notes: string
+  username: string
 }
 
 export async function getPosts(): Promise<{
@@ -30,6 +32,7 @@ export async function getPosts(): Promise<{
   try {
     const posts = await db.post.findMany({ orderBy: { createdAt: "desc" } })
     const postsData = posts.map((post) => {
+      const username = post.username || ""
       return {
         id: post.id,
         name: post.name,
@@ -39,6 +42,7 @@ export async function getPosts(): Promise<{
         ingredients: post.ingredients,
         instructions: post.instructions,
         cookTime: post.cookTime,
+        username,
       }
     })
     return { postsData }
@@ -66,7 +70,8 @@ export async function addPostDB(
       data: {
         userId,
         title: post.title,
-        name: user?.name,
+        name: user.name,
+        username: user.username,
         cookTime: post.cookTime,
         imageUrl: post.imageUrl,
         ingredients: post.ingredients,

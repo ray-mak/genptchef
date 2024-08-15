@@ -22,7 +22,9 @@
     "next-cloudinary": "^6.10.0",
     "openai": "^4.54.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-loader-spinner": "^6.1.6",
+    "react-spinners": "^0.14.1"
   },
   "devDependencies": {
     "@types/node": "^20",

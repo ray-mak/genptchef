@@ -3,7 +3,7 @@ import { db } from "./db"
 
 export const checkUser = async () => {
   const user = await currentUser()
-  console.log(user)
+
   // check for current logged in Clerk user
   if (!user) {
     return null
@@ -26,6 +26,7 @@ export const checkUser = async () => {
       name: `${user.firstName}`,
       imageUrl: user.imageUrl,
       email: user.emailAddresses[0].emailAddress,
+      username: user.username,
     },
   })
 
