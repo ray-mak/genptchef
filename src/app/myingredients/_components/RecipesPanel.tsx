@@ -54,7 +54,7 @@ export default function RecipesPanel({
             className="m-auto"
           />
           <p className="text-center text-2xl font-medium text-neutral-700 mt-6">
-            Add ingredients and click "Generate Recipes" to get started. Every
+            Add ingredients and click Generate Recipes to get started. Every
             ingredient you add unlocks more unique recipes!
           </p>
         </div>
