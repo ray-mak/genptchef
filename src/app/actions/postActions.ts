@@ -22,7 +22,6 @@ type AddPostProps = {
   instructions: string[]
   imageUrl: string
   notes: string
-  username: string
 }
 
 export async function getPosts(): Promise<{
